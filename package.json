@@ -7,7 +7,7 @@
     "server": "nodemon index.js",
     "test": "cross-env DB_ENV=testing jest --watch --verbose"
   },
-  "repository": "https://github.com/labs13-build-my-app/backend.git",
+  "repository": "https://github.com/labs14-build-my-app/backend.git",
   "license": "MIT",
   "dependencies": {
     "cors": "^2.8.5",
