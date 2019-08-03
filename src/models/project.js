@@ -5,7 +5,8 @@ const projectSchema = new mongoose.Schema(
     projectName: {
       type: String,
       required: true,
-      trim: true
+      trim: true,
+      unique: true
     },
     projectDescription: {
       type: String,
@@ -17,6 +18,16 @@ const projectSchema = new mongoose.Schema(
     timestamps: true
   }
 );
+
+projectSchema.methods.toJSON = function() {
+  const project = this;
+  const projectObject = project.toObject();
+
+  delete projectObject.__v;
+  delete projectObject._id;
+
+  return projectObject;
+};
 
 const Project = mongoose.model("Project", projectSchema);
 
