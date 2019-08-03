@@ -14,4 +14,20 @@ router.post("/users", async (req, res) => {
   }
 });
 
+router.post("/users/login", async (req, res) => {
+  const { email, password } = req.body;
+
+  try {
+    const user = await User.findByCredentials(email, password);
+
+    if (!user) {
+      res.status(401).json({ error: "Wrong credentials." });
+    }
+
+    res.status(200).json({ user });
+  } catch (e) {
+    res.status(400).json(e);
+  }
+});
+
 module.exports = router;

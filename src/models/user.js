@@ -56,6 +56,31 @@ const userSchema = new mongoose.Schema(
   }
 );
 
+// Relationships between other models of data
+userSchema.virtual("projects", {
+  ref: "Project",
+  localField: "_id",
+  foreignField: "owner"
+});
+
+// Static methods -----
+userSchema.statics.findByCredentials = async (email, password) => {
+  const user = await User.findOne({ email });
+
+  if (!user) {
+    throw new Error("Unable to login.");
+  }
+
+  const isMatch = await bcrypt.compare(password, user.password);
+
+  if (!isMatch) {
+    throw new Error("Unable to login.");
+  }
+
+  return user;
+};
+
+// toJSON method - responsible for what gets sent back to the client -------
 userSchema.methods.toJSON = function() {
   const user = this;
   const userObject = user.toObject();
