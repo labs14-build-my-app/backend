@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const User = require("../models/user");
+const auth = require("../middleware/auth");
 
 router.post("/users", async (req, res) => {
   const user = new User(req.body);
@@ -14,17 +15,18 @@ router.post("/users", async (req, res) => {
   }
 });
 
-router.post("/users/login", async (req, res) => {
+router.post("/users/login", auth, async (req, res) => {
   const { email, password } = req.body;
 
   try {
     const user = await User.findByCredentials(email, password);
+    const token = await user.generateAuthToken();
 
     if (!user) {
       res.status(401).json({ error: "Wrong credentials." });
     }
 
-    res.status(200).json({ user });
+    res.status(200).json({ user, token });
   } catch (e) {
     res.status(400).json(e);
   }

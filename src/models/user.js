@@ -80,6 +80,17 @@ userSchema.statics.findByCredentials = async (email, password) => {
   return user;
 };
 
+// methods to each individual user --------
+userSchema.methods.generateAuthToken = async function() {
+  const user = this;
+  const token = jwt.sign({ _id: user._id.toString() }, "thisismynewcourse");
+
+  user.tokens = user.tokens.concat({ token });
+  await user.save();
+
+  return token;
+};
+
 // toJSON method - responsible for what gets sent back to the client -------
 userSchema.methods.toJSON = function() {
   const user = this;
