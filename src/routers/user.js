@@ -7,7 +7,9 @@ router.post("/users", async (req, res) => {
 
   try {
     await user.save();
-    res.status(201).json({ user });
+    const token = await user.generateAuthToken();
+
+    res.status(201).json({ user, token });
   } catch (e) {
     res
       .status(400)
@@ -15,7 +17,7 @@ router.post("/users", async (req, res) => {
   }
 });
 
-router.post("/users/login", auth, async (req, res) => {
+router.post("/users/login", async (req, res) => {
   const { email, password } = req.body;
 
   try {
@@ -28,7 +30,33 @@ router.post("/users/login", auth, async (req, res) => {
 
     res.status(200).json({ user, token });
   } catch (e) {
-    res.status(400).json(e);
+    res.status(400).json({ error: "Wrong credentials." });
+  }
+});
+
+router.post("/users/logout", auth, async (req, res) => {
+  try {
+    req.user.tokens = req.user.tokens.filter(token => {
+      return token.token !== req.token;
+    });
+
+    await req.user.save();
+
+    res.status(200).json({ success: "Logged out successfully" });
+  } catch (e) {
+    res.status(500).json(e);
+  }
+});
+
+router.delete("/users/me", auth, async (req, res) => {
+  try {
+    await req.user.remove();
+
+    res
+      .status(200)
+      .json({ success: `User ${req.user.name} was successfully deleted.` });
+  } catch (e) {
+    res.status(500).json(e);
   }
 });
 
