@@ -2,13 +2,13 @@ const mongoose = require("mongoose");
 
 const projectSchema = new mongoose.Schema(
   {
-    projectName: {
+    name: {
       type: String,
       required: true,
       trim: true,
       unique: true
     },
-    projectDescription: {
+    description: {
       type: String,
       required: true,
       trim: true
