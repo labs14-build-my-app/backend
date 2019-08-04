@@ -29,7 +29,6 @@ projectSchema.methods.toJSON = function() {
   const projectObject = project.toObject();
 
   delete projectObject.__v;
-  delete projectObject._id;
 
   return projectObject;
 };
