@@ -97,4 +97,25 @@ router.put("/projects/:id", auth, async (req, res) => {
   }
 });
 
+router.delete("/projects/:id", auth, async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const project = await Project.findOneAndDelete({
+      _id: id,
+      owner: req.user._id
+    });
+
+    if (!project) {
+      return res
+        .status(400)
+        .json({ error: `There is no project with an ID of ${id}` });
+    }
+
+    res.status(200).json(project);
+  } catch (e) {
+    res.status(500).json(e);
+  }
+});
+
 module.exports = router;
