@@ -11,7 +11,7 @@ POST /users
 
 Request >
 
-```json
+```javascript
 {
 	"name":STRING,
 	"password": STRING,
@@ -23,7 +23,7 @@ Request >
 
 Response (example) >
 
-```json
+```javascript
 {
     "user": {
         "age": 0,
@@ -46,7 +46,7 @@ POST /users/login
 
 Request >
 
-```json
+```javascript
 {
 	"email":STRING,
 	"password":STRING
@@ -55,7 +55,7 @@ Request >
 
 Response (example) > 
 
-```json
+```javascript
 {
     "user": {
         "age": 0,
@@ -88,7 +88,7 @@ Request >
 
 Response >
 
-```json
+```javascript
 {
     "success": "Logged out successfully"
 }
@@ -112,7 +112,7 @@ Request >
 
 Response >
 
-```json
+```javascript
 {
     "success": "Successfully signed out of all devices."
 }
@@ -138,7 +138,7 @@ Request >
 
 Response (example) >
 
-```json
+```javascript
 {
     "age": 0,
     "_id": "5d488ee77d6aca00171fc89a",
@@ -158,7 +158,7 @@ DELETE /users/me
 
 Request >
 
-```json
+```javascript
 // ** Send this in the Headers of the request **
 
 {
@@ -201,7 +201,7 @@ Request >
 
 Response >
 
-```json
+```javascript
 {
     "age": 0,
     "_id": "5d4895c77d6aca00171fc8a1",
@@ -223,7 +223,7 @@ POST /projects
 
 Request > 
 
-```json
+```javascript
 // ** Send this in the Headers of the request **
 
 {
@@ -240,7 +240,7 @@ Request >
 
 Response >
 
-```json
+```javascript
 {
     "_id": "5d4896a77d6aca00171fc8a4",
     "name": "GetJobs123",
@@ -259,7 +259,7 @@ GET /projects/all
 
 Response >
 
-```json
+```javascript
 [
     {
         "_id": "5d4896a77d6aca00171fc8a4",
@@ -298,7 +298,7 @@ GET /projects
 
 Request >
 
-```json
+```javascript
 // ** Send this in the Headers of the request **
 
 {
@@ -308,7 +308,7 @@ Request >
 
 Response > 
 
-```json
+```javascript
 [
     {
         "_id": "5d4896a77d6aca00171fc8a4",
@@ -347,7 +347,7 @@ GET /projects/:id
 
 Request >
 
-```json
+```javascript
 // ** Send this in the Headers of the request **
 
 {
@@ -357,7 +357,7 @@ Request >
 
 Response >
 
-```json
+```javascript
 {
     "project": {
         "_id": "5d4896a77d6aca00171fc8a4",
@@ -380,7 +380,7 @@ PUT /projects/:id
 
 Request >
 
-```json
+```javascript
 // ** Send this in the Headers of the request **
 
 {
@@ -398,7 +398,7 @@ Request >
 
 Response >
 
-```json
+```javascript
 {
     "_id": "5d4896a77d6aca00171fc8a4",
     "name": "GetAJob",
@@ -417,7 +417,7 @@ DELETE /projects/:id
 
 Request >
 
-```json
+```javascript
 // ** Send this in the Headers of the request **
 
 {
@@ -427,7 +427,7 @@ Request >
 
 Response >
 
-```json
+```javascript
 // ** Responds with the Project you just deleted **
 
 {
