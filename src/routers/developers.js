@@ -18,12 +18,11 @@ router.get("/developers", async (req, res) => {
 router.get('/developers/:id', async (req, res) => {
     const _id = req.params.id;
     try {
-        const developer = await User.findById(_id);
-        const isDev = await User.find({ isDeveloper: true });
-        if (!user && !isDev) {
-            return res.status(404).send()
-        }
-        res.send(developer);
+      const developer = await User.findOne({ isDeveloper: true, _id });
+      if (!developer) {
+        return res.status(404).send()
+      }
+        res.status(200).send(developer);
     } catch (error) {
         res.status(500).send(error);
     }
