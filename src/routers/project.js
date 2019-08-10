@@ -30,6 +30,32 @@ router.get("/projects", auth, async (req, res) => {
   }
 });
 
+router.get("/projects/dev", auth, async (req, res) => {
+  try {
+    await req.user
+      .populate({
+        path: "devprojects"
+      })
+      .execPopulate();
+    res.status(200).json(req.user.devprojects);
+  } catch (e) {
+    res.status(500).json(e);
+  }
+});
+
+router.put("/projects/dev/:id", auth, async (req, res) => {
+  try {
+    const project = await Project.findById(req.params.id);
+    project.developers.push({ _id: req.user._id });
+
+    await project.save();
+
+    res.status(200).json(project);
+  } catch (e) {
+    res.status(500).json(e);
+  }
+});
+
 router.get("/projects/:id", auth, async (req, res) => {
   const { id: _id } = req.params;
 
@@ -65,7 +91,7 @@ router.post("/projects", auth, async (req, res) => {
 });
 
 router.put("/projects/:id", auth, async (req, res) => {
-  const allowedUpdates = ["name", "description"];
+  const allowedUpdates = ["name", "description", "developers"];
   const updates = Object.keys(req.body);
   const isValidOperation = updates.every(update =>
     allowedUpdates.includes(update)
