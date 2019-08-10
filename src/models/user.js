@@ -63,6 +63,12 @@ userSchema.virtual("projects", {
   foreignField: "owner"
 });
 
+userSchema.virtual("devprojects", {
+  ref: "Project",
+  localField: "_id",
+  foreignField: "developers"
+});
+
 // Static methods -----
 userSchema.statics.findByCredentials = async (email, password) => {
   const user = await User.findOne({ email });
