@@ -18,6 +18,19 @@ const projectSchema = new mongoose.Schema(
       required: true,
       ref: "User"
     },
+    status: {
+      type: String,
+      required: true,
+      trim: true,
+      enum: [
+        "in progress",
+        "review",
+        "updated",
+        "completed",
+        "cancelled",
+        "searching"
+      ]
+    },
     developers: [
       {
         type: mongoose.Schema.Types.ObjectId,
