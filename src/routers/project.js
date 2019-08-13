@@ -91,7 +91,7 @@ router.post("/projects", auth, async (req, res) => {
 });
 
 router.put("/projects/:id", auth, async (req, res) => {
-  const allowedUpdates = ["name", "description", "developers"];
+  const allowedUpdates = ["name", "description", "developers", "status"];
   const updates = Object.keys(req.body);
   const isValidOperation = updates.every(update =>
     allowedUpdates.includes(update)
