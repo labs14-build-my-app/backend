@@ -3,15 +3,22 @@ const router = express.Router();
 const Project = require("../models/project");
 const auth = require("../middleware/auth");
 
-router.get("/projects/all", async (req, res) => {
+router.get("/projects/all", auth, async (req, res) => {
   try {
     const projects = await Project.find({});
+    const newProjects = [];
 
     if (!projects) {
       return res.status(400).json({ error: "Unable to fetch projects." });
     }
 
-    res.status(200).json(projects);
+    projects.forEach(project => {
+      if (!project.developers.includes(req.user._id)) {
+        newProjects.push(project);
+      }
+    });
+
+    res.status(200).json(newProjects);
   } catch (e) {
     res.status(500).json(e);
   }
