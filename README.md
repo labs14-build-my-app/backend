@@ -440,3 +440,71 @@ Response >
 }
 ```
 
+# Developers Endpoints -
+
+## Get all developers
+
+GET /developers
+
+Response >
+
+```javascript
+
+[ {
+    "user": {
+        "age": 0,
+        "_id": "5d4889187d6aca00171fc976",
+        "name": "JohnW",
+        "email": "asdf@1234.com",
+        "isDeveloper": true,
+        "createdAt": "2019-08-05T19:58:56.599Z",
+        "updatedAt": "2019-08-05T20:05:09.767Z"
+    },
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZDQ4ODkxODdkNmFjYTAwMTcxZmM4OTQiLCJpYXQiOjE1NjUwMzU1MDl9.8ewyzI1kfu2FUE4voTMu49IwhWHyz_YUT2qbYvZxiu4"
+  },
+  {
+    "user": {
+        "age": 0,
+        "_id": "5d4889187d6aca00171fc894",
+        "name": "RubenF",
+        "email": "1234567@1234.com",
+        "isDeveloper": true,
+        "createdAt": "2019-08-05T19:52:56.599Z",
+        "updatedAt": "2019-08-05T19:52:56.599Z"
+    },
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZDQ4ODkxODdkNmFjYTAwMTcxZmM4hytiLCJplkriOjE1NjUwMzU1MDl9.8ewyzI1kfu2FUE4voTMu49IwhWHyz_YUT2qbYvZxiu4"
+  }]
+```
+
+## Get developers by id
+
+GET /developers/:id
+
+Request >
+
+```javascript
+// ** Send this in the Headers of the request **
+
+{
+    "Authorization": `Bearer ${user.token}`
+}
+```
+
+Response >
+
+```javascript
+
+{
+    "user": {
+        "age": 0,
+        "_id": "5d4889187d6aca00171fc976",
+        "name": "JohnW",
+        "email": "asdf@1234.com",
+        "isDeveloper": true,
+        "createdAt": "2019-08-05T19:58:56.599Z",
+        "updatedAt": "2019-08-05T20:05:09.767Z"
+    },
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZDQ4ODkxODdkNmFjYTAwMTcxZmM4OTQiLCJpYXQiOjE1NjUwMzU1MDl9.8ewyzI1kfu2FUE4voTMu49IwhWHyz_YUT2qbYvZxiu4"
+  }
+  ```
+
