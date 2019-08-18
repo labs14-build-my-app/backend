@@ -31,6 +31,19 @@ const projectSchema = new mongoose.Schema(
         "searching"
       ]
     },
+    category: {
+      type: [String],
+      enum: [
+        "finance",
+        "marketing",
+        "management",
+        "SEO",
+        "ios",
+        "android",
+        "other"
+      ],
+      required: true
+    },
     developers: [
       {
         type: mongoose.Schema.Types.ObjectId,

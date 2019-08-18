@@ -5,7 +5,16 @@ const auth = require("../middleware/auth");
 
 router.get("/projects/all", auth, async (req, res) => {
   try {
-    const projects = await Project.find({});
+    const qparams = {};
+
+    if (req.query.category) {
+      qparams.category = req.query.category;
+    }
+
+    const projects = await Project.find({ ...qparams })
+      .limit(parseInt(req.query.limit))
+      .skip(parseInt(req.query.skip));
+
     const newProjects = [];
 
     if (!projects) {
@@ -18,6 +27,7 @@ router.get("/projects/all", auth, async (req, res) => {
       }
     });
 
+    console.log(req.query);
     res.status(200).json(newProjects);
   } catch (e) {
     res.status(500).json(e);
@@ -98,7 +108,13 @@ router.post("/projects", auth, async (req, res) => {
 });
 
 router.put("/projects/:id", auth, async (req, res) => {
-  const allowedUpdates = ["name", "description", "developers", "status"];
+  const allowedUpdates = [
+    "name",
+    "description",
+    "developers",
+    "status",
+    "category"
+  ];
   const updates = Object.keys(req.body);
   const isValidOperation = updates.every(update =>
     allowedUpdates.includes(update)
