@@ -44,6 +44,11 @@ const projectSchema = new mongoose.Schema(
       ],
       required: true
     },
+    tags: {
+      type: [String],
+      required: true,
+      trim: true
+    },
     developers: [
       {
         type: mongoose.Schema.Types.ObjectId,
