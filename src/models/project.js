@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const User = require("./user");
 
 const projectSchema = new mongoose.Schema(
   {
@@ -11,7 +12,8 @@ const projectSchema = new mongoose.Schema(
     description: {
       type: String,
       required: true,
-      trim: true
+      trim: true,
+      maxlength: 1200
     },
     owner: {
       type: mongoose.Schema.Types.ObjectId,
@@ -31,6 +33,10 @@ const projectSchema = new mongoose.Schema(
         "searching"
       ]
     },
+    price: {
+      type: Number,
+      required: true
+    },
     category: {
       type: [String],
       enum: [
@@ -49,18 +55,25 @@ const projectSchema = new mongoose.Schema(
       required: true,
       trim: true
     },
+
     developers: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User"
       }
-    ]
+    ],
+    endDate: {
+      type: Date
+    }
   },
   {
     timestamps: true
   }
 );
 
+// methods to each individual project ------------
+
+// toJSON method -----------
 projectSchema.methods.toJSON = function() {
   const project = this;
   const projectObject = project.toObject();

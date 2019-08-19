@@ -6,6 +6,7 @@ const auth = require("../middleware/auth");
 router.get("/projects/all", auth, async (req, res) => {
   try {
     const qparams = {};
+    const newProjects = [];
 
     if (req.query.category) {
       qparams.category = req.query.category;
@@ -14,8 +15,6 @@ router.get("/projects/all", auth, async (req, res) => {
     const projects = await Project.find({ ...qparams })
       .limit(parseInt(req.query.limit))
       .skip(parseInt(req.query.skip));
-
-    const newProjects = [];
 
     if (!projects) {
       return res.status(400).json({ error: "Unable to fetch projects." });
@@ -27,7 +26,6 @@ router.get("/projects/all", auth, async (req, res) => {
       }
     });
 
-    console.log(req.query);
     res.status(200).json(newProjects);
   } catch (e) {
     res.status(500).json(e);
