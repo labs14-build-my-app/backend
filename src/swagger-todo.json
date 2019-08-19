@@ -1,0 +1,71 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "DevFindr Backend API",
+    "version": "1.0.0",
+    "description": "API used for DevFindr.",
+    "license": {
+      "name": "MIT"
+    }
+  },
+  "host": "devfindr-mongo-db.herokuapp.com",
+  "schemes": ["http", "https"],
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+  "paths": {
+    "/users/me": {
+      "get": {
+        "operationId": "getUserProfile",
+        "summary": "Retrieve logged in user's data.",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": " A successful fetch",
+            "schema": {
+              "type": "object",
+              "$ref": "#/definitions/User"
+            }
+          },
+          "401": {
+            "description": "401 Response",
+            "examples": {
+              "application/json": "{\n    \"error\": Please authentice.\n}"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "User": {
+      "type": "object",
+      "required": ["firstName", "lastName", "password", "email", "isDeveloper"],
+      "properties": {
+        "age": {
+          "type": "integer"
+        },
+        "firstName": {
+          "type": "string"
+        },
+        "lastName": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "isDeveloper": {
+          "type": "boolean"
+        },
+        "createdAt": {
+          "type": "string"
+        },
+        "updatedAt": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

@@ -1,5 +1,7 @@
 const express = require("express");
 const cors = require("cors");
+const swaggerUi = require("swagger-ui-express");
+const swaggerDocument = require("./swagger.json");
 require("./db/mongoose");
 
 const app = express();
@@ -17,5 +19,6 @@ app.use(projectRouter);
 app.use(usersRouter);
 app.use(devRouter);
 app.use(seedRouter);
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.listen(port, () => console.log(`Server is up on port ${port}`));
