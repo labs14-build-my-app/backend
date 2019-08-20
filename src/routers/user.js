@@ -9,11 +9,9 @@ router.get("/users/:id", auth, async (req, res) => {
     const user = await User.findOne({ _id: id, isDeveloper: false });
 
     if (!user) {
-      return res
-        .status(400)
-        .json({
-          error: `There was no user with an ID ${id} who is an entrepreneur.`
-        });
+      return res.status(400).json({
+        error: `There was no user with an ID ${id} who is an entrepreneur.`
+      });
     }
 
     res.status(200).json(user);
@@ -90,7 +88,14 @@ router.get("/users/me", auth, async (req, res) => {
 });
 
 router.put("/users/me", auth, async (req, res) => {
-  const allowedUpdates = ["name", "email", "password", "age", "isDeveloper"];
+  const allowedUpdates = [
+    "firstName",
+    "lastName",
+    "email",
+    "password",
+    "age",
+    "isDeveloper"
+  ];
   const updates = Object.keys(req.body);
   const isValidOperation = updates.every(update =>
     allowedUpdates.includes(update)
