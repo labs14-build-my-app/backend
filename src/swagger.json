@@ -90,7 +90,7 @@
         }
       }
     },
-    "/users/:id": {
+    "/users/entrepreneur/:id": {
       "get": {
         "operationId": "getEntrepreneurById",
         "summary": "Retrieve an entrepreneur by their ID.",
