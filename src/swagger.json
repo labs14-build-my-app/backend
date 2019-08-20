@@ -1,54 +1,445 @@
 {
   "swagger": "2.0",
   "info": {
+    "title": "DevFindr Backend API",
     "version": "1.0.0",
-    "title": "Swagger Petstore",
-    "description": "A sample API that uses a petstore as an example to demonstrate features in the swagger-2.0 specification",
-    "termsOfService": "http://swagger.io/terms/",
-    "contact": {
-      "name": "Swagger API Team"
-    },
+    "description": "API used for DevFindr.",
     "license": {
       "name": "MIT"
     }
   },
-  "host": "petstore.swagger.io",
-  "basePath": "/api",
-  "schemes": ["http"],
+  "host": "devfindr-mongo-db.herokuapp.com",
+  "schemes": ["http", "https"],
   "consumes": ["application/json"],
   "produces": ["application/json"],
   "paths": {
-    "/pets": {
+    "/users/me": {
       "get": {
-        "description": "Returns all pets from the system that the user has access to",
+        "operationId": "getUserProfile",
+        "summary": "Retrieve logged in user's data.",
         "produces": ["application/json"],
         "responses": {
           "200": {
-            "description": "A list of pets.",
+            "description": " A successful fetch",
+            "schema": {
+              "type": "object",
+              "$ref": "#/definitions/User"
+            }
+          },
+          "401": {
+            "description": "401 Response",
+            "examples": {
+              "application/json": "{\n    \"error\": Please authentice.\n}"
+            }
+          }
+        }
+      },
+      "put": {
+        "operationId": "editCurrentUser",
+        "summary": "Edit the currently logged in User. Send token in Authorization header.",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Successfully edited ",
+            "schema": {
+              "type": "object",
+              "$ref": "#/definitions/User"
+            }
+          },
+          "400": {
+            "description": "Invalid updates sent in request.",
+            "examples": {
+              "application/json": "{\n    \"error\": Invalid updates.\n}"
+            }
+          }
+        }
+      },
+      "delete": {
+        "operationId": "deleteCurrentUser",
+        "summary": "Deletes the currently logged in user. Send token in Authorization header.",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Successfully deleted user.",
+            "examples": {
+              "application/json": "{\n    \"success\": User username was successfully deleted.\n}"
+            }
+          }
+        }
+      }
+    },
+    "/users": {
+      "post": {
+        "operationId": "signupUser",
+        "summary": " Register a new user",
+        "produces": ["application/json"],
+        "responses": {
+          "201": {
+            "description": "Sucessfully created new user",
+            "schema": {
+              "type": "object",
+              "$ref": "#/definitions/User"
+            }
+          },
+          "401": {
+            "description": "Error",
+            "examples": {
+              "application/json": "{\n    \"error\": There was an error creating the user.\n}"
+            }
+          }
+        }
+      }
+    },
+    "/users/:id": {
+      "get": {
+        "operationId": "getEntrepreneurById",
+        "summary": "Retrieve an entrepreneur by their ID.",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": " A successful fetch.",
+            "schema": {
+              "type": "object",
+              "$ref": "#/definitions/User"
+            }
+          },
+          "400": {
+            "description": "An entrepreneur with that ID doesn't exist.",
+            "examples": {
+              "application/json": "{\n    \"error\": There was no user with an ID :id who is an entrepreneur.\n}"
+            }
+          }
+        }
+      }
+    },
+    "/users/login": {
+      "post": {
+        "operationId": "loginUser",
+        "summary": "Log in a User and get a JWT.",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Succesfully logged in.",
+            "schema": {
+              "type": "object",
+              "$ref": "#/definitions/User"
+            }
+          },
+          "401": {
+            "description": "Invalid credentials",
+            "examples": {
+              "application/json": "{\n    \"error\": Wrong credentials.\n}"
+            }
+          }
+        }
+      }
+    },
+    "/users/logout": {
+      "post": {
+        "operationId": "logoutCurrentToken",
+        "summary": "Logs you out of the current session.",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Logged out successfully.",
+            "examples": {
+              "application/json": "{\n    \"success\": Logged out successfully.\n}"
+            }
+          }
+        }
+      }
+    },
+    "/users/logoutall": {
+      "post": {
+        "operationId": "logoutAllSessions",
+        "summary": "Logs you out of all sessions, deleting all tokens.",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Sucessfully signed out of all sessions.",
+            "examples": {
+              "application/json": "{\n    \"success\": Sucessfully signed out of all devices.\n}"
+            }
+          }
+        }
+      }
+    },
+    "/projects/all": {
+      "get": {
+        "operationId": "getListOfAvailableProjects",
+        "summary": "Retrieves a list of available projects.",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Successfully fetched projects",
             "schema": {
               "type": "array",
               "items": {
-                "$ref": "#/definitions/Pet"
+                "$ref": "#/definitions/Project"
               }
             }
+          },
+          "400": {
+            "description": "Unable to fetch projects.",
+            "examples": {
+              "application/json": "{\n    \"error\": Unable to fetch projects.\n}"
+            }
+          }
+        }
+      }
+    },
+    "/projects": {
+      "get": {
+        "operationId": "getListOfEntrepreneurProjects",
+        "summary": "Retrieve a list of the currently logged in entrepreneur's projects.",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": " A successful fetch",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Project"
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "createNewProject",
+        "summary": "Create a new Project owned by a logged in entrepreneur.",
+        "produces": ["application/json"],
+        "responses": {
+          "201": {
+            "description": "Successfully created project.",
+            "schema": {
+              "type": "object",
+              "$ref": "#/definitions/Project"
+            }
+          }
+        }
+      }
+    },
+    "/projects/dev": {
+      "get": {
+        "operationId": "getListOfDeveloperProjects",
+        "summary": "Retrieve a list of the currently logged in developer's projects.",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": " A successful fetch",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Project"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/projects/dev/:id": {
+      "put": {
+        "operationId": "editDevProjectById",
+        "summary": "Edit a project associated to a dev by project ID.",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Successfully edited dev project.",
+            "schema": {
+              "type": "object",
+              "$ref": "#/definitions/Project"
+            }
+          }
+        }
+      }
+    },
+    "/projects/:id": {
+      "put": {
+        "operationId": "editProjectByIdEntrepreneur",
+        "summary": "Edit a project associated to an entrepreneur by project ID.",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Successfully edited project.",
+            "schema": {
+              "type": "object",
+              "$ref": "#/definitions/Project"
+            }
+          },
+          "401": {
+            "description": "Invalid updates",
+            "examples": {
+              "application/json": "{\n    \"error\": Invalid updates.\n}"
+            }
+          },
+          "400": {
+            "description": "No project with that ID.",
+            "examples": {
+              "application/json": "{\n    \"error\": There is no project with an id of :id\n}"
+            }
+          }
+        }
+      },
+      "delete": {
+        "operationId": "deleteProjectById",
+        "summary": "Delete a project by it's ID.",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Succesfully deleted.",
+            "schema": {
+              "type": "object",
+              "$ref": "#/definitions/Project"
+            }
+          },
+          "400": {
+            "description": "Invalid ID",
+            "examples": {
+              "application/json": "{\n    \"error\": There  is no project with an ID of :id.\n}"
+            }
+          }
+        }
+      }
+    },
+    "/developers": {
+      "get": {
+        "operationId": "getListOfDevelopers",
+        "summary": "Retrieve a list of developers.",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Successful fetch.",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "$ref": "#/definitions/User"
+              }
+            }
+          },
+          "400": {
+            "description": "Unable to fetch developers.",
+            "examples": {
+              "application/json": "{\n    \"error\": Unable to fetch developers.\n}"
+            }
+          }
+        }
+      }
+    },
+    "/developers/:id": {
+      "get": {
+        "operationId": "getDevById",
+        "summary": "Fetch a developer by their ID.",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": " A successful fetch",
+            "schema": {
+              "type": "object",
+              "$ref": "#/definitions/User"
+            }
+          },
+          "404": {
+            "description": "No developer found"
           }
         }
       }
     }
   },
   "definitions": {
-    "Pet": {
+    "User": {
       "type": "object",
-      "required": ["id", "name"],
+      "required": ["firstName", "lastName", "password", "email", "isDeveloper"],
       "properties": {
-        "id": {
-          "type": "integer",
-          "format": "int64"
+        "_id": {
+          "type": "string"
+        },
+        "age": {
+          "type": "integer"
+        },
+        "firstName": {
+          "type": "string"
+        },
+        "lastName": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "isDeveloper": {
+          "type": "boolean"
+        },
+        "createdAt": {
+          "type": "string"
+        },
+        "updatedAt": {
+          "type": "string"
+        }
+      }
+    },
+    "Project": {
+      "type": "object",
+      "required": [
+        "category",
+        "name",
+        "description",
+        "status",
+        "price",
+        "tags"
+      ],
+      "properties": {
+        "_id": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string"
+        },
+        "updatedAt": {
+          "type": "string"
+        },
+        "category": {
+          "type": "string"
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         },
         "name": {
           "type": "string"
         },
-        "tag": {
+        "description": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "searching",
+            "review",
+            "updated",
+            "cancelled",
+            "in progress",
+            "completed"
+          ]
+        },
+        "price": {
+          "type": "integer"
+        },
+        "owner": {
+          "type": "string"
+        },
+        "developers": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "endDate": {
           "type": "string"
         }
       }

@@ -2,6 +2,26 @@ const router = require("express").Router();
 const User = require("../models/user");
 const auth = require("../middleware/auth");
 
+router.get("/users/:id", auth, async (req, res) => {
+  const id = req.params.id;
+
+  try {
+    const user = await User.findOne({ _id: id, isDeveloper: false });
+
+    if (!user) {
+      return res
+        .status(400)
+        .json({
+          error: `There was no user with an ID ${id} who is an entrepreneur.`
+        });
+    }
+
+    res.status(200).json(user);
+  } catch (e) {
+    res.status(500).json(e);
+  }
+});
+
 router.post("/users", async (req, res) => {
   const user = new User(req.body);
 

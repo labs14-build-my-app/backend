@@ -22,7 +22,7 @@ const projectSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      required: true,
+      default: "searching",
       trim: true,
       enum: [
         "in progress",

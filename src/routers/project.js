@@ -119,7 +119,7 @@ router.put("/projects/:id", auth, async (req, res) => {
   );
 
   if (!isValidOperation) {
-    return res.status(400).json({ error: `Invalid updates!` });
+    return res.status(401).json({ error: `Invalid updates!` });
   }
 
   try {

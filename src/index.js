@@ -18,7 +18,7 @@ app.use(express.json());
 app.use(projectRouter);
 app.use(usersRouter);
 app.use(devRouter);
-app.use(seedRouter);
+// app.use(seedRouter);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.listen(port, () => console.log(`Server is up on port ${port}`));
