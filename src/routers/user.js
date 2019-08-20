@@ -2,6 +2,24 @@ const router = require("express").Router();
 const User = require("../models/user");
 const auth = require("../middleware/auth");
 
+router.get("/users/entrepreneur/:id", auth, async (req, res) => {
+  const id = req.params.id;
+
+  try {
+    const user = await User.findOne({ _id: id, isDeveloper: false });
+
+    if (!user) {
+      return res.status(400).json({
+        error: `There was no user with an ID ${id} who is an entrepreneur.`
+      });
+    }
+
+    res.status(200).json(user);
+  } catch (e) {
+    res.status(500).json(e);
+  }
+});
+
 router.post("/users", async (req, res) => {
   const user = new User(req.body);
 
@@ -70,7 +88,14 @@ router.get("/users/me", auth, async (req, res) => {
 });
 
 router.put("/users/me", auth, async (req, res) => {
-  const allowedUpdates = ["name", "email", "password", "age", "isDeveloper"];
+  const allowedUpdates = [
+    "firstName",
+    "lastName",
+    "email",
+    "password",
+    "age",
+    "isDeveloper"
+  ];
   const updates = Object.keys(req.body);
   const isValidOperation = updates.every(update =>
     allowedUpdates.includes(update)

@@ -5,8 +5,16 @@ const auth = require("../middleware/auth");
 
 router.get("/projects/all", auth, async (req, res) => {
   try {
-    const projects = await Project.find({});
+    const qparams = {};
     const newProjects = [];
+
+    if (req.query.category) {
+      qparams.category = req.query.category;
+    }
+
+    const projects = await Project.find({ ...qparams })
+      .limit(parseInt(req.query.limit))
+      .skip(parseInt(req.query.skip));
 
     if (!projects) {
       return res.status(400).json({ error: "Unable to fetch projects." });
@@ -98,14 +106,23 @@ router.post("/projects", auth, async (req, res) => {
 });
 
 router.put("/projects/:id", auth, async (req, res) => {
-  const allowedUpdates = ["name", "description", "developers", "status"];
+  const allowedUpdates = [
+    "name",
+    "description",
+    "developers",
+    "status",
+    "category",
+    "tags",
+    "price",
+    "endDate"
+  ];
   const updates = Object.keys(req.body);
   const isValidOperation = updates.every(update =>
     allowedUpdates.includes(update)
   );
 
   if (!isValidOperation) {
-    return res.status(400).json({ error: `Invalid updates!` });
+    return res.status(401).json({ error: `Invalid updates!` });
   }
 
   try {
