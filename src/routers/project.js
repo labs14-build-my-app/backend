@@ -185,4 +185,18 @@ router.delete("/projects/:id", auth, async (req, res) => {
   }
 });
 
+router.post("/projects/:id/proposal", auth, async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const project = await Project.findById(id);
+    project.proposals.push({ ...req.body });
+
+    await project.save();
+    res.status(401).json(project);
+  } catch (e) {
+    res.status(500).json(e);
+  }
+});
+
 module.exports = router;

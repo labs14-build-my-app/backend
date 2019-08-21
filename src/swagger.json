@@ -226,7 +226,7 @@
     "/projects/dev/:id": {
       "put": {
         "operationId": "editDevProjectById",
-        "summary": "Edit a project associated to a dev by project ID.",
+        "summary": "Add a developer to a project.",
         "produces": ["application/json"],
         "responses": {
           "200": {
@@ -242,7 +242,7 @@
     "/projects/:id": {
       "put": {
         "operationId": "editProjectByIdEntrepreneur",
-        "summary": "Edit a project associated to an entrepreneur by project ID.",
+        "summary": "Edit a project by project ID.",
         "produces": ["application/json"],
         "responses": {
           "200": {
