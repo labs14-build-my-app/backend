@@ -190,10 +190,12 @@ router.post("/projects/:id/proposal", auth, async (req, res) => {
 
   try {
     const project = await Project.findById(id);
-    project.proposals.push({ ...req.body });
+
+    project.proposals.push({ ...req.body, developer: req.user._id });
+    // console.log(project.proposals[project.proposals.length - 1]);
 
     await project.save();
-    res.status(401).json(project);
+    res.status(201).json(project);
   } catch (e) {
     res.status(500).json(e);
   }
