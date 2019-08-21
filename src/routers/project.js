@@ -195,6 +195,7 @@ router.post("/projects/:id/proposal", auth, async (req, res) => {
     // console.log(project.proposals[project.proposals.length - 1]);
 
     await project.save();
+
     res.status(201).json(project);
   } catch (e) {
     res.status(500).json(e);
