@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const User = require("./user");
+const proposalSchema = require("./proposal");
 
 const projectSchema = new mongoose.Schema(
   {
@@ -20,6 +20,7 @@ const projectSchema = new mongoose.Schema(
       required: true,
       ref: "User"
     },
+    proposals: [proposalSchema],
     status: {
       type: String,
       default: "searching",

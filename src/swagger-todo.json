@@ -4,14 +4,21 @@
     "title": "DevFindr Backend API",
     "version": "1.0.0",
     "description": "API used for DevFindr.",
+    "contact": {
+      "name": "DevFindr Team",
+      "email": "devfindrapp@gmail.com",
+      "url": "https://www.devfindr.com"
+    },
     "license": {
       "name": "MIT"
     }
   },
+
   "host": "devfindr-mongo-db.herokuapp.com",
   "schemes": ["http", "https"],
   "consumes": ["application/json"],
   "produces": ["application/json"],
+
   "paths": {
     "/users/me": {
       "get": {

@@ -114,7 +114,8 @@ router.put("/projects/:id", auth, async (req, res) => {
     "category",
     "tags",
     "price",
-    "endDate"
+    "endDate",
+    "proposals"
   ];
   const updates = Object.keys(req.body);
   const isValidOperation = updates.every(update =>
