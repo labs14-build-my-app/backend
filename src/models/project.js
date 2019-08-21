@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const proposalSchema = require("./proposal");
+const User = require("../models/user");
 
 const projectSchema = new mongoose.Schema(
   {
@@ -19,6 +20,9 @@ const projectSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       required: true,
       ref: "User"
+    },
+    ownerName: {
+      type: String
     },
     proposals: [proposalSchema],
     status: {
@@ -72,8 +76,16 @@ const projectSchema = new mongoose.Schema(
   }
 );
 
-// methods to each individual project ------------
+projectSchema.pre("save", async function(next) {
+  const project = this;
+  const owner = await User.findById(project.owner);
 
+  if (!project.ownerName) {
+    project.ownerName = `${owner.firstName} ${owner.lastName}`;
+  }
+
+  next();
+});
 // toJSON method -----------
 projectSchema.methods.toJSON = function() {
   const project = this;
