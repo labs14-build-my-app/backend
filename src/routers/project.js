@@ -70,6 +70,9 @@ router.get("/projects/dev", auth, async (req, res) => {
 router.put("/projects/dev/:id", auth, async (req, res) => {
   try {
     const project = await Project.findById(req.params.id);
+    if (project.developers.includes(req.user._id)) {
+      return res.status(400).json({ error: "You already have that project." });
+    }
     project.developers.push({ _id: req.user._id });
     if (project.status == "searching") {
       project.status = "review";
