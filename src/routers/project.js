@@ -33,6 +33,12 @@ router.get("/projects/all", auth, async (req, res) => {
 });
 
 router.get("/projects", auth, async (req, res) => {
+  if (req.user.isDeveloper) {
+    return res.status(400).json({
+      error:
+        "User is a developer. Please use the endpoint /projects/dev to fetch developer's owned projects"
+    });
+  }
   try {
     await req.user
       .populate({
@@ -46,6 +52,9 @@ router.get("/projects", auth, async (req, res) => {
 });
 
 router.get("/projects/dev", auth, async (req, res) => {
+  if (!req.user.isDeveloper) {
+    return res.status(400).json({ error: "User is not a developer." });
+  }
   try {
     await req.user
       .populate({
@@ -62,6 +71,9 @@ router.put("/projects/dev/:id", auth, async (req, res) => {
   try {
     const project = await Project.findById(req.params.id);
     project.developers.push({ _id: req.user._id });
+    if (project.status == "searching") {
+      project.status = "review";
+    }
 
     await project.save();
 
@@ -114,7 +126,9 @@ router.put("/projects/:id", auth, async (req, res) => {
     "category",
     "tags",
     "price",
-    "endDate"
+    "endDate",
+    "proposals",
+    "ownerName"
   ];
   const updates = Object.keys(req.body);
   const isValidOperation = updates.every(update =>
