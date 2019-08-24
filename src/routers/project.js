@@ -185,13 +185,21 @@ router.delete("/projects/:id", auth, async (req, res) => {
   }
 });
 
-router.post("/projects/:id/proposal", auth, async (req, res) => {
+router.post("/projects/proposal/:id", auth, async (req, res) => {
   const { id } = req.params;
 
   try {
     const project = await Project.findById(id);
 
     project.proposals.push({ ...req.body, developer: req.user._id });
+
+    if (!project.developers.includes(req.user._id)) {
+      project.developers.push(req.user._id);
+    }
+
+    if (project.status == "searching") {
+      project.status = "review";
+    }
     // console.log(project.proposals[project.proposals.length - 1]);
 
     await project.save();
@@ -199,6 +207,26 @@ router.post("/projects/:id/proposal", auth, async (req, res) => {
     res.status(201).json(project);
   } catch (e) {
     res.status(500).json(e);
+  }
+});
+
+router.delete("/projects/proposal/:id", auth, async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const project = await Project.findById(id);
+    if (project.proposals.length === 0) {
+      return res
+        .status(400)
+        .json({ error: "There are no proposals on this project." });
+    }
+    project.proposals[project.proposals.length - 1].remove();
+
+    await project.save();
+
+    res.status(200).json({ success: "Deleted proposal." });
+  } catch (e) {
+    res.status(500).json({ error: `Internal server error.`, e });
   }
 });
 

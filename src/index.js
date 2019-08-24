@@ -10,7 +10,7 @@ const port = process.env.PORT || 8080;
 const projectRouter = require("./routers/project");
 const usersRouter = require("./routers/user");
 const devRouter = require("./routers/developers");
-const seedRouter = require("./routers/seed"); // comment out in production
+// const seedRouter = require("./routers/seed"); // comment out in production
 
 app.use(cors());
 app.use(express.json());
